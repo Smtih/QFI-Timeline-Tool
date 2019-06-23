@@ -4,17 +4,21 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.0.0-rc.0",
+    "@types/google-map-react": "^0.23.12",
     "@types/jest": "24.0.15",
     "@types/node": "12.0.8",
     "@types/react": "16.8.20",
     "@types/react-dom": "16.8.4",
+    "@types/styled-components": "^4.1.16",
+    "google-map-react": "^1.1.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
     "styled-components": "^5.0.0-beta.2",
-    "typescript": "3.5.2"
+    "typescript": "3.4.5",
+    "yarn": "^1.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
