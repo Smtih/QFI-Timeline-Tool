@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import GoogleMapReact from "google-map-react";
-import { googleMapApiKey } from "../../../env";
+import { googleMapApiKey } from "env";
 
 function Map({ ...rest }) {
   return (
