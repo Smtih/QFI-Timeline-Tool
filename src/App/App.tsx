@@ -5,7 +5,7 @@ import { SideBar, Map, Filters } from "./components";
 function App({ ...rest }) {
   return (
     <OuterContainer {...rest}>
-      <SideBar style={{ width: "200px" }} />
+      <SideBar style={{ flex: "0 0 200px" }} />
       <ColumnContainer>
         <Map />
         <Filters />
