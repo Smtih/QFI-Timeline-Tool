@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PlacesAutocomplete from "react-places-autocomplete";
 import Select from "react-select";
@@ -6,61 +6,55 @@ import Select from "react-select";
 type Props = { handleAddressSelected: (address: string) => void };
 type State = { address: string };
 
-class PlacesSearch extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { address: "" };
-  }
+function PlacesSearch({ handleAddressSelected, ...rest }: Props) {
+  const [address, setAddress] = useState("");
 
-  handleChange = (address: string) => {
+  function handleChange(address: string) {
     if (address) {
-      this.setState({ address });
+      setAddress(address);
     }
-  };
-
-  handleSelect = (address: string) => {
-    this.handleChange(address);
-    this.props.handleAddressSelected(address);
-  };
-
-  render() {
-    const { handleAddressSelected, ...rest } = this.props;
-    return (
-      <StyledPlacesAutocomplete
-        debounce={500}
-        value={this.state.address}
-        onChange={this.handleChange}
-        searchOptions={searchOptions}
-        {...rest}
-      >
-        {({ getInputProps, suggestions, loading }) => {
-          const { onChange } = getInputProps();
-
-          const options = suggestions.map((suggestion, i) => ({
-            value: String(i),
-            label: suggestion.description
-          }));
-
-          return (
-            <Select
-              menuIsOpen={options.length > 0}
-              filterOption={() => true}
-              onInputChange={value => onChange({ target: { value } })}
-              components={{
-                DropdownIndicator: () => null,
-                IndicatorSeparator: () => null
-              }}
-              placeholder={"Search"}
-              options={options}
-              onChange={(value: any) => {
-                this.handleSelect(value.label);
-              }}
-            />
-          );
-        }}
-      </StyledPlacesAutocomplete>
-    );
   }
+
+  function handleSelect(address: string) {
+    handleChange(address);
+    handleAddressSelected(address);
+  }
+
+  return (
+    <StyledPlacesAutocomplete
+      debounce={500}
+      value={address}
+      onChange={handleChange}
+      searchOptions={searchOptions}
+      {...rest}
+    >
+      {({ getInputProps, suggestions }) => {
+        const { onChange } = getInputProps();
+
+        const options = suggestions.map((suggestion, i) => ({
+          value: String(i),
+          label: suggestion.description
+        }));
+
+        return (
+          <Select
+            menuIsOpen={options.length > 0}
+            filterOption={() => true}
+            onInputChange={value => onChange({ target: { value } })}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null
+            }}
+            placeholder={"Search"}
+            options={options}
+            onChange={(value: any) => {
+              handleSelect(value.label);
+            }}
+          />
+        );
+      }}
+    </StyledPlacesAutocomplete>
+  );
 }
 
 const google = (window as any).google;
