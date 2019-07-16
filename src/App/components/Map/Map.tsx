@@ -1,26 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useGlobal } from "reactn";
 import styled from "styled-components";
 import GoogleMapReact from "google-map-react";
-import { googleMapApiKey } from "env";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 function Map({ ...rest }) {
+  const [location, setLocation] = useState(defaultLocation);
+  const [zoom, setZoom] = useState(defaultZoom);
+  const [currentAddress] = useGlobal("currentAddress");
+
+  useEffect(() => {
+    if (currentAddress) {
+      geocodeByAddress(currentAddress)
+        .then(results => getLatLng(results[0]))
+        .then(location => {
+          setLocation(location);
+          setZoom(defaultZoom);
+        })
+        .catch(error => console.error("Error", error));
+    }
+  }, [currentAddress]);
+
   return (
     <Container {...rest}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: googleMapApiKey }}
-        defaultCenter={{
-          lat: 59.95,
-          lng: 30.33
-        }}
-        defaultZoom={11}
-      ></GoogleMapReact>
+      <GoogleMapReact center={location} zoom={zoom}>
+        {currentAddress && <Marker lat={location.lat} lng={location.lng} />}
+      </GoogleMapReact>
     </Container>
   );
 }
 
+const defaultLocation = {
+  lat: 59.95,
+  lng: 30.33
+};
+const defaultZoom = 15;
+
 const Container = styled.div`
   display: flex;
   flex: 1;
+`;
+
+interface MarkerProps {
+  readonly lat: number;
+  readonly lng: number;
+}
+
+const Marker = styled.div<MarkerProps>`
+  width: 10px;
+  height: 10px;
+  background-color: red;
 `;
 
 export { Map };
