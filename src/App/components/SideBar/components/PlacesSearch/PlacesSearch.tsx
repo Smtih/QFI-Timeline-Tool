@@ -1,32 +1,33 @@
 import React, { useState } from "react";
+import { useGlobal } from "reactn";
 import styled from "styled-components";
 import PlacesAutocomplete from "react-places-autocomplete";
 import Select from "react-select";
 
-type Props = { handleAddressSelected: (address: string) => void };
-type State = { address: string };
+type Props = {};
 
-function PlacesSearch({ handleAddressSelected, ...rest }: Props) {
-  const [address, setAddress] = useState("");
+function PlacesSearch(props: Props) {
+  const [searchString, setSearchString] = useState("");
+  const [, setCurrentAddress] = useGlobal("currentAddress");
 
-  function handleChange(address: string) {
-    if (address) {
-      setAddress(address);
+  function handleChange(searchString: string) {
+    if (searchString) {
+      setSearchString(searchString);
     }
   }
 
   function handleSelect(address: string) {
     handleChange(address);
-    handleAddressSelected(address);
+    setCurrentAddress(address);
   }
 
   return (
     <StyledPlacesAutocomplete
       debounce={500}
-      value={address}
+      value={searchString}
       onChange={handleChange}
       searchOptions={searchOptions}
-      {...rest}
+      {...props}
     >
       {({ getInputProps, suggestions }) => {
         const { onChange } = getInputProps();

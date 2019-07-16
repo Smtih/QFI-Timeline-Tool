@@ -5,8 +5,7 @@ import { PlacesSearch } from "./components";
 function SideBar({ ...rest }) {
   return (
     <OuterContainer {...rest}>
-      <PlacesSearch handleAddressSelected={() => {}} />
-      <div style={{ height: 100, backgroundColor: "red" }} />
+      <PlacesSearch />
     </OuterContainer>
   );
 }
