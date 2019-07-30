@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useGlobal } from "reactn";
 import styled from "styled-components";
 import PlacesAutocomplete from "react-places-autocomplete";
@@ -10,16 +10,22 @@ function PlacesSearch(props: Props) {
   const [searchString, setSearchString] = useState("");
   const [, setCurrentAddress] = useGlobal("currentAddress");
 
-  function handleChange(searchString: string) {
-    if (searchString) {
-      setSearchString(searchString);
-    }
-  }
+  const handleChange = useCallback(
+    (searchString: string) => {
+      if (searchString) {
+        setSearchString(searchString);
+      }
+    },
+    [setSearchString]
+  );
 
-  function handleSelect(address: string) {
-    handleChange(address);
-    setCurrentAddress(address);
-  }
+  const handleSelect = useCallback(
+    (address: string) => {
+      handleChange(address);
+      setCurrentAddress(address);
+    },
+    [handleChange, setCurrentAddress]
+  );
 
   return (
     <StyledPlacesAutocomplete
