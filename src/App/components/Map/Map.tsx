@@ -3,6 +3,7 @@ import { useGlobal } from "reactn";
 import styled from "styled-components";
 import GoogleMapReact from "google-map-react";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { Marker } from "./components";
 
 function Map({ ...rest }) {
   const [location, setLocation] = useState(defaultLocation);
@@ -24,7 +25,14 @@ function Map({ ...rest }) {
   return (
     <Container {...rest}>
       <GoogleMapReact center={location} zoom={zoom}>
-        {currentAddress && <Marker lat={location.lat} lng={location.lng} />}
+        {currentAddress && (
+          <Marker
+            lat={location.lat}
+            lng={location.lng}
+            width={20}
+            height={20}
+          />
+        )}
       </GoogleMapReact>
     </Container>
   );
@@ -39,17 +47,6 @@ const defaultZoom = 15;
 const Container = styled.div`
   display: flex;
   flex: 1;
-`;
-
-interface MarkerProps {
-  readonly lat: number;
-  readonly lng: number;
-}
-
-const Marker = styled.div<MarkerProps>`
-  width: 10px;
-  height: 10px;
-  background-color: red;
 `;
 
 export { Map };
