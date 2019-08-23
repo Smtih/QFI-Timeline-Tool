@@ -10,8 +10,8 @@ initReactnPersist({
 function App({ ...rest }) {
   return (
     <OuterContainer {...rest}>
-      <SideBar style={{ flex: "0 0 200px" }} />
-      <ColumnContainer>
+      <SideBar style={{ flex: "1 1 100px" }} />
+      <ColumnContainer style={{ flex: "5 5 0" }}>
         <Map />
         <Filters />
       </ColumnContainer>
