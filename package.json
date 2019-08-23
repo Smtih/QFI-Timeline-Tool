@@ -20,6 +20,7 @@
     "react-scripts": "3.0.1",
     "react-select": "^3.0.4",
     "reactn": "^2.1.4",
+    "reactn-persist": "^1.1.1",
     "redux": "^4.0.1",
     "styled-components": "^5.0.0-beta.2",
     "typescript": "3.4.5",

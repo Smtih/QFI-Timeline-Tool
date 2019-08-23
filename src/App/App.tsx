@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { SideBar, Map, Filters } from "./components";
+import initReactnPersist from "reactn-persist";
+
+initReactnPersist({
+  storage: localStorage
+});
 
 function App({ ...rest }) {
   return (
