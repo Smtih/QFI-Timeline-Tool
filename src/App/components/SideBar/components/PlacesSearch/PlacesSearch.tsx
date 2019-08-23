@@ -4,9 +4,11 @@ import styled from "styled-components";
 import PlacesAutocomplete from "react-places-autocomplete";
 import Select from "react-select";
 
-type Props = {};
+type Props = {
+  style?: React.CSSProperties;
+};
 
-function PlacesSearch(props: Props) {
+function PlacesSearch({ ...rest }: Props) {
   const [searchString, setSearchString] = useState("");
   const [, setCurrentAddress] = useGlobal("currentAddress");
 
@@ -28,39 +30,40 @@ function PlacesSearch(props: Props) {
   );
 
   return (
-    <StyledPlacesAutocomplete
-      debounce={500}
-      value={searchString}
-      onChange={handleChange}
-      searchOptions={searchOptions}
-      {...props}
-    >
-      {({ getInputProps, suggestions }) => {
-        const { onChange } = getInputProps();
+    <OuterContainer {...rest}>
+      <StyledPlacesAutocomplete
+        debounce={500}
+        value={searchString}
+        onChange={handleChange}
+        searchOptions={searchOptions}
+      >
+        {({ getInputProps, suggestions }) => {
+          const { onChange } = getInputProps();
 
-        const options = suggestions.map((suggestion, i) => ({
-          value: String(i),
-          label: suggestion.description
-        }));
+          const options = suggestions.map((suggestion, i) => ({
+            value: String(i),
+            label: suggestion.description
+          }));
 
-        return (
-          <Select
-            menuIsOpen={options.length > 0}
-            filterOption={() => true}
-            onInputChange={value => onChange({ target: { value } })}
-            components={{
-              DropdownIndicator: () => null,
-              IndicatorSeparator: () => null
-            }}
-            placeholder={"Search"}
-            options={options}
-            onChange={(value: any) => {
-              handleSelect(value.label);
-            }}
-          />
-        );
-      }}
-    </StyledPlacesAutocomplete>
+          return (
+            <Select
+              menuIsOpen={options.length > 0}
+              filterOption={() => true}
+              onInputChange={value => onChange({ target: { value } })}
+              components={{
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null
+              }}
+              placeholder={"Search"}
+              options={options}
+              onChange={(value: any) => {
+                handleSelect(value.label);
+              }}
+            />
+          );
+        }}
+      </StyledPlacesAutocomplete>
+    </OuterContainer>
   );
 }
 
@@ -76,6 +79,12 @@ const searchOptions = {
 const StyledPlacesAutocomplete = styled(PlacesAutocomplete)`
   display: flex;
   flex: 1;
+`;
+
+const OuterContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 `;
 
 export { PlacesSearch };
