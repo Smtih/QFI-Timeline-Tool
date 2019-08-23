@@ -25,14 +25,7 @@ function Map({ ...rest }) {
   return (
     <Container {...rest}>
       <GoogleMapReact center={location} zoom={zoom}>
-        {currentAddress && (
-          <Marker
-            lat={location.lat}
-            lng={location.lng}
-            width={20}
-            height={20}
-          />
-        )}
+        {currentAddress && <Marker lat={location.lat} lng={location.lng} />}
       </GoogleMapReact>
     </Container>
   );
