@@ -1,5 +1,6 @@
 import React from "react";
-import styled from "styled-components";
+import List from "@material-ui/core/List";
+import Card from "@material-ui/core/Card";
 import { PlacesSearch, CurrentLocation, SavedLocations } from "./components";
 
 type Props = {
@@ -8,19 +9,12 @@ type Props = {
 
 function SideBar({ ...rest }: Props) {
   return (
-    <OuterContainer {...rest}>
-      <PlacesSearch style={{ flex: 0, padding: 8 }} />
-      <CurrentLocation style={{ flex: 0, padding: 8 }} />
+    <List component={Card} {...rest}>
+      <PlacesSearch />
+      <CurrentLocation />
       <SavedLocations />
-    </OuterContainer>
+    </List>
   );
 }
-
-const OuterContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  border-right: 1px solid gray;
-`;
 
 export { SideBar };

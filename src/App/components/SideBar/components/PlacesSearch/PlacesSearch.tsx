@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useGlobal } from "reactn";
+import { ListItem } from "@material-ui/core";
 import styled from "styled-components";
 import PlacesAutocomplete from "react-places-autocomplete";
 import Select from "react-select";
@@ -30,8 +31,8 @@ function PlacesSearch({ ...rest }: Props) {
   );
 
   return (
-    <OuterContainer {...rest}>
-      <StyledPlacesAutocomplete
+    <ListItem component="div" {...rest}>
+      <PlacesAutocomplete
         debounce={500}
         value={searchString}
         onChange={handleChange}
@@ -46,24 +47,26 @@ function PlacesSearch({ ...rest }: Props) {
           }));
 
           return (
-            <Select
-              menuIsOpen={options.length > 0}
-              filterOption={() => true}
-              onInputChange={value => onChange({ target: { value } })}
-              components={{
-                DropdownIndicator: () => null,
-                IndicatorSeparator: () => null
-              }}
-              placeholder={"Search"}
-              options={options}
-              onChange={(value: any) => {
-                handleSelect(value.label);
-              }}
-            />
+            <SelectContainer>
+              <Select
+                menuIsOpen={options.length > 0}
+                filterOption={() => true}
+                onInputChange={value => onChange({ target: { value } })}
+                components={{
+                  DropdownIndicator: () => null,
+                  IndicatorSeparator: () => null
+                }}
+                placeholder={"Search"}
+                options={options}
+                onChange={(value: any) => {
+                  handleSelect(value.label);
+                }}
+              />
+            </SelectContainer>
           );
         }}
-      </StyledPlacesAutocomplete>
-    </OuterContainer>
+      </PlacesAutocomplete>
+    </ListItem>
   );
 }
 
@@ -76,15 +79,8 @@ const searchOptions = {
   }
 };
 
-const StyledPlacesAutocomplete = styled(PlacesAutocomplete)`
-  display: flex;
-  flex: 1;
-`;
-
-const OuterContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+const SelectContainer = styled.div`
+  width: 100%;
 `;
 
 export { PlacesSearch };

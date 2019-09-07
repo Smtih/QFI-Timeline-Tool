@@ -1,11 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, Fragment } from "react";
 import { useGlobal } from "reactn";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListSubheader,
+  Collapse
+} from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 
 function SavedLocations() {
   const [savedAddresses] = useGlobal("savedAddresses");
@@ -14,13 +16,19 @@ function SavedLocations() {
   const handleClick = useCallback(() => setOpen(!open), [setOpen, open]);
 
   return (
-    <List component="div" aria-labelledby="sidebar-list">
+    <Fragment>
       <ListItem button onClick={handleClick}>
         <ListItemText primary="Saved Locations" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List
+          component="div"
+          disablePadding
+          subheader={
+            <NoLocationsSubheader enabled={savedAddresses.length === 0} />
+          }
+        >
           {savedAddresses.map((address, i) => (
             <ListItem key={i} button>
               <ListItemText primary={address} />
@@ -28,7 +36,21 @@ function SavedLocations() {
           ))}
         </List>
       </Collapse>
-    </List>
+    </Fragment>
+  );
+}
+
+interface Props {
+  enabled: boolean;
+}
+function NoLocationsSubheader({ enabled, ...rest }: Props) {
+  if (!enabled) {
+    return null;
+  }
+  return (
+    <ListSubheader component="div" {...rest}>
+      No saved locations yet...
+    </ListSubheader>
   );
 }
 
