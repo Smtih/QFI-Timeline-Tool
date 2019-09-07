@@ -10,6 +10,10 @@ type Props = {
 function CurrentLocation({ ...rest }: Props) {
   const [currentAddress] = useGlobal("currentAddress");
 
+  if (!currentAddress) {
+    return null;
+  }
+
   return (
     <OuterContainer {...rest}>
       <Pin color={"red"} width={20} height={20} />

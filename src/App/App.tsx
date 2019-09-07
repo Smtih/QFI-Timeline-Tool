@@ -1,7 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { SideBar, Map, Filters } from "./components";
 import initReactnPersist from "reactn-persist";
+import { setGlobal } from "reactn";
+import { SideBar, Map, Filters } from "./components";
+
+setGlobal({
+  currentAddress: null,
+  savedAddresses: []
+});
 
 initReactnPersist({
   storage: localStorage
