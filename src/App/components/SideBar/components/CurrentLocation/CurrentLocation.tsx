@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback } from "react";
+import React, { Fragment, useCallback, useMemo } from "react";
 import { useGlobal } from "reactn";
 import { Pin } from "svg";
 import {
@@ -21,6 +21,11 @@ function CurrentLocation({ ...rest }: Props) {
     setSavedAddresses([...savedAddresses, currentAddress]);
   }, [savedAddresses, setSavedAddresses, currentAddress]);
 
+  const existingLocation = useMemo(
+    () => savedAddresses.includes(currentAddress),
+    [savedAddresses, currentAddress]
+  );
+
   if (!currentAddress) {
     return null;
   }
@@ -35,11 +40,11 @@ function CurrentLocation({ ...rest }: Props) {
       </ListItem>
       <ButtonContainer>
         <Button
-          disabled={savedAddresses.includes(currentAddress)}
+          disabled={existingLocation}
           variant="outlined"
           onClick={saveCurrentAddress}
         >
-          Save Location
+          {existingLocation ? "Saved" : "Save Location"}
         </Button>
       </ButtonContainer>
     </Fragment>

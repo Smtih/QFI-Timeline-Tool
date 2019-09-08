@@ -4,12 +4,13 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListSubheader,
+  Typography,
   Collapse
 } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 
 function SavedLocations() {
+  const [, setCurrentAddress] = useGlobal("currentAddress");
   const [savedAddresses] = useGlobal("savedAddresses");
   const [open, setOpen] = useState(true);
 
@@ -30,7 +31,7 @@ function SavedLocations() {
           }
         >
           {savedAddresses.map((address, i) => (
-            <ListItem key={i} button>
+            <ListItem key={i} button onClick={() => setCurrentAddress(address)}>
               <ListItemText primary={address} />
             </ListItem>
           ))}
@@ -47,11 +48,7 @@ function NoLocationsSubheader({ enabled, ...rest }: Props) {
   if (!enabled) {
     return null;
   }
-  return (
-    <ListSubheader component="div" {...rest}>
-      No saved locations yet...
-    </ListSubheader>
-  );
+  return <Typography>No saved locations yet...</Typography>;
 }
 
 export { SavedLocations };
