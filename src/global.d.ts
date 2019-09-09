@@ -1,5 +1,4 @@
 import "reactn";
-import { REHIDRATED_KEY } from "reactn-persist";
 
 declare module "reactn/default" {
   export interface Reducers {}
@@ -16,8 +15,7 @@ declare module "reactn/default" {
   }
 
   export interface State {
-    [REHIDRATED_KEY]: boolean;
-    currentAddress: Address;
+    currentAddress: Address | null;
     savedAddresses: Address[];
   }
 }

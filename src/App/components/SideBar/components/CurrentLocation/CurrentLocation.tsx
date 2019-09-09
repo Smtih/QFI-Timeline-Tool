@@ -1,3 +1,4 @@
+import { Address } from "reactn/default";
 import React, { Fragment, useCallback, useMemo } from "react";
 import { useGlobal } from "reactn";
 import { Pin } from "svg";
@@ -18,11 +19,15 @@ function CurrentLocation({ ...rest }: Props) {
   const [currentAddress] = useGlobal("currentAddress");
 
   const saveCurrentAddress = useCallback(() => {
-    setSavedAddresses([...savedAddresses, currentAddress]);
+    const addresses = [...savedAddresses, currentAddress].filter(
+      (address): address is Address => !!address
+    );
+    setSavedAddresses(addresses);
   }, [savedAddresses, setSavedAddresses, currentAddress]);
 
   const existingLocation = useMemo(
     () =>
+      !!currentAddress &&
       !!savedAddresses.find(
         address => address.placeId === currentAddress.placeId
       ),

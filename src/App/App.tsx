@@ -1,17 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import initReactnPersist from "reactn-persist";
-import { setGlobal } from "reactn";
 import { SideBar, Map, Filters } from "./components";
+import { Persist } from "./utils";
 
-setGlobal({
+const defaultGlobal = {
   currentAddress: null,
   savedAddresses: []
-});
+};
 
-initReactnPersist({
-  storage: localStorage
-});
+const persist = new Persist(defaultGlobal, 12 * 60 * 60 * 1000);
+persist.initialise();
 
 function App({ ...rest }) {
   return (
