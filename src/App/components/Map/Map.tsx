@@ -8,6 +8,7 @@ function Map({ ...rest }) {
   const [location, setLocation] = useState(defaultLocation);
   const [zoom, setZoom] = useState(defaultZoom);
   const [currentAddress] = useGlobal("currentAddress");
+  const [savedAddresses] = useGlobal("savedAddresses");
 
   useEffect(() => {
     if (currentAddress) {
@@ -19,6 +20,14 @@ function Map({ ...rest }) {
   return (
     <Container {...rest}>
       <GoogleMapReact center={location} zoom={zoom}>
+        {savedAddresses &&
+          savedAddresses.map(address => (
+            <Marker
+              key={address.placeId}
+              color={"green"}
+              {...address.location}
+            />
+          ))}
         {currentAddress && <Marker {...currentAddress.location} />}
       </GoogleMapReact>
     </Container>
