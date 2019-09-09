@@ -22,7 +22,10 @@ function CurrentLocation({ ...rest }: Props) {
   }, [savedAddresses, setSavedAddresses, currentAddress]);
 
   const existingLocation = useMemo(
-    () => savedAddresses.includes(currentAddress),
+    () =>
+      !!savedAddresses.find(
+        address => address.placeId === currentAddress.placeId
+      ),
     [savedAddresses, currentAddress]
   );
 
