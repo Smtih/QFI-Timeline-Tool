@@ -30,9 +30,16 @@ function SavedLocations() {
             <NoLocationsSubheader enabled={savedAddresses.length === 0} />
           }
         >
-          {savedAddresses.map((address, i) => (
-            <ListItem key={i} button onClick={() => setCurrentAddress(address)}>
-              <ListItemText primary={address} />
+          {savedAddresses.map(address => (
+            <ListItem
+              key={address.placeId}
+              button
+              onClick={() => setCurrentAddress(address)}
+            >
+              <ListItemText
+                primary={address.firstLine}
+                secondary={address.secondLine}
+              />
             </ListItem>
           ))}
         </List>

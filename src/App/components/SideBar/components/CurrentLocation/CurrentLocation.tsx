@@ -36,7 +36,10 @@ function CurrentLocation({ ...rest }: Props) {
         <ListItemIcon>
           <Pin width={30} height={30} color="red" />
         </ListItemIcon>
-        <ListItemText>{currentAddress}</ListItemText>
+        <ListItemText
+          primary={currentAddress.firstLine}
+          secondary={currentAddress.secondLine}
+        ></ListItemText>
       </ListItem>
       <ButtonContainer>
         <Button

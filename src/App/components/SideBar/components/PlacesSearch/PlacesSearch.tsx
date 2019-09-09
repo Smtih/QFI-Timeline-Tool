@@ -2,7 +2,10 @@ import React, { useState, useCallback } from "react";
 import { useGlobal } from "reactn";
 import { ListItem } from "@material-ui/core";
 import styled from "styled-components";
-import PlacesAutocomplete from "react-places-autocomplete";
+import PlacesAutocomplete, {
+  geocodeByPlaceId,
+  getLatLng
+} from "react-places-autocomplete";
 import Select from "react-select";
 
 type Props = {
@@ -23,9 +26,26 @@ function PlacesSearch({ ...rest }: Props) {
   );
 
   const handleSelect = useCallback(
-    (address: string) => {
-      handleChange(address);
-      setCurrentAddress(address);
+    value => {
+      if (!value) {
+        return;
+      }
+      const suggestion = value.value;
+      handleChange(suggestion.description);
+      geocodeByPlaceId(suggestion.placeId)
+        .then(results => getLatLng(results[0]))
+        .then(location => {
+          setCurrentAddress({
+            placeId: suggestion.placeId,
+            full: suggestion.description,
+            firstLine: suggestion.formattedSuggestion.mainText,
+            secondLine: suggestion.formattedSuggestion.secondaryText,
+            location
+          });
+        })
+        .catch(error => {
+          console.error(error);
+        });
     },
     [handleChange, setCurrentAddress]
   );
@@ -41,8 +61,8 @@ function PlacesSearch({ ...rest }: Props) {
         {({ getInputProps, suggestions }) => {
           const { onChange } = getInputProps();
 
-          const options = suggestions.map((suggestion, i) => ({
-            value: String(i),
+          const options = suggestions.map(suggestion => ({
+            value: suggestion,
             label: suggestion.description
           }));
 
@@ -52,15 +72,10 @@ function PlacesSearch({ ...rest }: Props) {
                 menuIsOpen={options.length > 0}
                 filterOption={() => true}
                 onInputChange={value => onChange({ target: { value } })}
-                components={{
-                  DropdownIndicator: () => null,
-                  IndicatorSeparator: () => null
-                }}
+                components={defaultComponents}
                 placeholder={"Search"}
                 options={options}
-                onChange={(value: any) => {
-                  handleSelect(value.label);
-                }}
+                onChange={handleSelect}
               />
             </SelectContainer>
           );
@@ -69,6 +84,11 @@ function PlacesSearch({ ...rest }: Props) {
     </ListItem>
   );
 }
+
+const defaultComponents = {
+  DropdownIndicator: () => null,
+  IndicatorSeparator: () => null
+};
 
 const google = (window as any).google;
 const searchOptions = {
