@@ -1,44 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useGlobal } from "reactn";
 import styled from "styled-components";
-import GoogleMapReact from "google-map-react";
-import { Marker } from "./components";
+import GoogleMapReact, { ChangeEventValue, Bounds } from "google-map-react";
+import { Address, Suspect } from "./components";
 
-function Map({ ...rest }) {
-  const [location, setLocation] = useState(defaultLocation);
-  const [zoom, setZoom] = useState(defaultZoom);
+interface Props {}
+
+function Map({ ...rest }: Props) {
+  const [mapInfo, setMapInfo] = useState(defaultMapInfo);
   const [currentAddress] = useGlobal("currentAddress");
   const [savedAddresses] = useGlobal("savedAddresses");
-
-  useEffect(() => {
-    if (currentAddress) {
-      setLocation(currentAddress.location);
-      setZoom(defaultZoom);
-    }
-  }, [currentAddress]);
+  const [suspects] = useGlobal("suspects");
 
   return (
     <Container {...rest}>
-      <GoogleMapReact center={location} zoom={zoom}>
-        {savedAddresses &&
-          savedAddresses.map(address => (
-            <Marker
-              key={address.placeId}
-              color={"green"}
-              {...address.location}
-            />
-          ))}
-        {currentAddress && <Marker {...currentAddress.location} />}
+      <GoogleMapReact
+        center={mapInfo.center}
+        zoom={mapInfo.zoom}
+        onChange={stuff => {
+          console.log(stuff);
+          setMapInfo(stuff);
+        }}
+      >
+        {savedAddresses.map((address, i) => (
+          <Address key={i} {...address} />
+        ))}
+        {suspects.map((suspect, i) => (
+          <Suspect key={i} zoom={mapInfo.zoom} {...suspect} />
+        ))}
+        {currentAddress && <Address {...currentAddress} />}
       </GoogleMapReact>
     </Container>
   );
 }
 
-const defaultLocation = {
-  lat: 59.95,
-  lng: 30.33
+const defaultBounds: Bounds = {
+  nw: { lat: 0, lng: 0 },
+  sw: { lat: 0, lng: 0 },
+  ne: { lat: 0, lng: 0 },
+  se: { lat: 0, lng: 0 }
 };
-const defaultZoom = 15;
+
+const defaultMapInfo: ChangeEventValue = {
+  center: { lat: -37.774376, lng: 144.947494 },
+  zoom: 15,
+  bounds: defaultBounds,
+  marginBounds: defaultBounds,
+  size: { width: 0, height: 0 }
+};
 
 const Container = styled.div`
   display: flex;

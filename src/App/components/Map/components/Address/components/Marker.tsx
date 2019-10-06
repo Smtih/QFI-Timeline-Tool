@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { Pin } from "svg";
 
 interface Props {
-  lat: number;
-  lng: number;
   color?: string;
   width?: number;
   height?: number;

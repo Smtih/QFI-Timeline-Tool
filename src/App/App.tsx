@@ -6,7 +6,16 @@ import { Persist } from "./utils";
 const defaultGlobal = {
   currentAddress: null,
   savedAddresses: [],
-  suspects: []
+  suspects: [
+    {
+      name: "Suspect 1",
+      lat: -37.774376,
+      lng: 144.947494,
+      radius: 100,
+      startTime: "now",
+      endTime: "now"
+    }
+  ]
 };
 
 const persist = new Persist(defaultGlobal, 12 * 60 * 60 * 1000);
