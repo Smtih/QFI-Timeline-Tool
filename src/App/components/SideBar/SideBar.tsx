@@ -1,7 +1,12 @@
 import React from "react";
 import List from "@material-ui/core/List";
 import Card from "@material-ui/core/Card";
-import { PlacesSearch, CurrentLocation, SavedLocations } from "./components";
+import {
+  PlacesSearch,
+  CurrentLocation,
+  SavedLocations,
+  Suspects
+} from "./components";
 
 type Props = {
   style: React.CSSProperties;
@@ -13,6 +18,7 @@ function SideBar({ ...rest }: Props) {
       <PlacesSearch />
       <CurrentLocation />
       <SavedLocations />
+      <Suspects />
     </List>
   );
 }

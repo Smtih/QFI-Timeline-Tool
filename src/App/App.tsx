@@ -5,7 +5,8 @@ import { Persist } from "./utils";
 
 const defaultGlobal = {
   currentAddress: null,
-  savedAddresses: []
+  savedAddresses: [],
+  suspects: []
 };
 
 const persist = new Persist(defaultGlobal, 12 * 60 * 60 * 1000);
