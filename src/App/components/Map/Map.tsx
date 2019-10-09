@@ -18,7 +18,6 @@ function Map({ ...rest }: Props) {
         center={mapInfo.center}
         zoom={mapInfo.zoom}
         onChange={stuff => {
-          console.log(stuff);
           setMapInfo(stuff);
         }}
       >
