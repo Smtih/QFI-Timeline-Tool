@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useGlobal } from "reactn";
 import styled from "styled-components";
-import GoogleMapReact, { ChangeEventValue, Bounds } from "google-map-react";
+import { Map as GoogleMap, Circle, Marker } from "google-maps-react";
 import { Address, Suspect } from "./components";
 
 interface Props {}
@@ -13,39 +13,32 @@ function Map({ ...rest }: Props) {
   const [suspects] = useGlobal("suspects");
 
   return (
-    <Container {...rest}>
-      <GoogleMapReact
-        center={mapInfo.center}
+    <Container {...rest} id="map">
+      <GoogleMap
+        google={google}
         zoom={mapInfo.zoom}
-        onChange={stuff => {
-          setMapInfo(stuff);
-        }}
+        initialCenter={mapInfo.center}
       >
         {savedAddresses.map((address, i) => (
-          <Address key={i} {...address} />
+          <Marker position={address} />
         ))}
         {suspects.map((suspect, i) => (
-          <Suspect key={i} zoom={mapInfo.zoom} {...suspect} />
+          <Circle key={i} center={{ ...suspect }} radius={suspect.radius} />
         ))}
-        {currentAddress && <Address {...currentAddress} />}
-      </GoogleMapReact>
+        {currentAddress && (
+          <Marker
+            icon={"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}
+            position={{ ...currentAddress }}
+          />
+        )}
+      </GoogleMap>
     </Container>
   );
 }
 
-const defaultBounds: Bounds = {
-  nw: { lat: 0, lng: 0 },
-  sw: { lat: 0, lng: 0 },
-  ne: { lat: 0, lng: 0 },
-  se: { lat: 0, lng: 0 }
-};
-
-const defaultMapInfo: ChangeEventValue = {
+const defaultMapInfo = {
   center: { lat: -37.774376, lng: 144.947494 },
-  zoom: 15,
-  bounds: defaultBounds,
-  marginBounds: defaultBounds,
-  size: { width: 0, height: 0 }
+  zoom: 15
 };
 
 const Container = styled.div`
