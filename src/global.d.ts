@@ -1,7 +1,24 @@
 import "reactn";
-import { AddressData, SuspectData } from "App/components/Map/components";
 
 declare module "reactn/default" {
+  export interface Mappable {
+    location: google.maps.LatLngLiteral;
+  }
+
+  export interface AddressData extends Mappable {
+    placeId: string;
+    full: string;
+    firstLine: string;
+    secondLine: string;
+  }
+
+  export interface SuspectData extends Mappable {
+    name: string;
+    radius: number;
+    startTime: string;
+    endTime: string;
+  }
+
   export interface Reducers {}
   export interface State {
     currentAddress: AddressData | null;

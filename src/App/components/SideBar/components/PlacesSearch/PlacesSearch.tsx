@@ -40,7 +40,7 @@ function PlacesSearch({ ...rest }: Props) {
             full: suggestion.description,
             firstLine: suggestion.formattedSuggestion.mainText,
             secondLine: suggestion.formattedSuggestion.secondaryText,
-            ...location
+            location
           });
         })
         .catch(error => {
