@@ -4,7 +4,7 @@ import { ListItem, ListItemText, Typography } from "@material-ui/core";
 import { ExpandableList } from "components";
 
 function SavedLocations() {
-  const [, setCurrentAddress] = useGlobal("currentAddress");
+  const [, setCurrentPosition] = useGlobal("currentPosition");
   const [savedAddresses] = useGlobal("savedAddresses");
 
   return (
@@ -16,7 +16,7 @@ function SavedLocations() {
         <ListItem
           key={address.placeId}
           button
-          onClick={() => setCurrentAddress(address)}
+          onClick={() => setCurrentPosition(address.location)}
         >
           <ListItemText
             primary={address.firstLine}

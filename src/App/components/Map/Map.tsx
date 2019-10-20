@@ -6,28 +6,39 @@ import { Map as GoogleMap, Circle, Marker } from "google-maps-react";
 interface Props {}
 
 function Map({ ...rest }: Props) {
-  const [currentAddress] = useGlobal("currentAddress");
+  const [currentPosition, setCurrentPosition] = useGlobal("currentPosition");
+  const [searchedAddress] = useGlobal("searchedAddress");
   const [savedAddresses] = useGlobal("savedAddresses");
   const [suspects] = useGlobal("suspects");
 
   return (
-    <Container {...rest} id="map">
+    <Container
+      style={{ width: "100%", height: "100%", position: "relative" }}
+      {...rest}
+    >
       <GoogleMap
+        style={{ width: "100%", height: "100%", position: "relative" }}
         google={google}
         zoom={defaultZoom}
         initialCenter={defaultCenter}
-        center={currentAddress ? currentAddress.location : undefined}
+        center={currentPosition}
+        onDragend={() => setCurrentPosition(undefined)}
       >
         {savedAddresses.map((address, i) => (
-          <Marker position={address.location} />
+          <Marker
+            title={address.firstLine}
+            icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
+            position={address.location}
+          />
         ))}
         {suspects.map((suspect, i) => (
           <Circle key={i} center={suspect.location} radius={suspect.radius} />
         ))}
-        {currentAddress && (
+        {searchedAddress && (
           <Marker
+            title={searchedAddress.firstLine}
             icon={"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}
-            position={currentAddress.location}
+            position={searchedAddress.location}
           />
         )}
       </GoogleMap>

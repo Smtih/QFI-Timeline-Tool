@@ -21,7 +21,8 @@ declare module "reactn/default" {
 
   export interface Reducers {}
   export interface State {
-    currentAddress: AddressData | null;
+    currentPosition?: google.maps.LatLngLiteral;
+    searchedAddress?: AddressData;
     savedAddresses: AddressData[];
     suspects: SuspectData[];
   }

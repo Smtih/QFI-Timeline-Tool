@@ -14,7 +14,8 @@ type Props = {
 
 function PlacesSearch({ ...rest }: Props) {
   const [searchString, setSearchString] = useState("");
-  const [, setCurrentAddress] = useGlobal("currentAddress");
+  const [, setSearchedAddress] = useGlobal("searchedAddress");
+  const [, setCurrentPosition] = useGlobal("currentPosition");
 
   const handleChange = useCallback(
     (searchString: string) => {
@@ -35,19 +36,20 @@ function PlacesSearch({ ...rest }: Props) {
       geocodeByPlaceId(suggestion.placeId)
         .then(results => getLatLng(results[0]))
         .then(location => {
-          setCurrentAddress({
+          setSearchedAddress({
             placeId: suggestion.placeId,
             full: suggestion.description,
             firstLine: suggestion.formattedSuggestion.mainText,
             secondLine: suggestion.formattedSuggestion.secondaryText,
             location
           });
+          setCurrentPosition(location);
         })
         .catch(error => {
           console.error(error);
         });
     },
-    [handleChange, setCurrentAddress]
+    [handleChange, setSearchedAddress, setCurrentPosition]
   );
 
   return (

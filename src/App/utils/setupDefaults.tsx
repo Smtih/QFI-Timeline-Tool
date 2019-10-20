@@ -45,7 +45,6 @@ function toSuspectData({
 }
 
 const defaultGlobal = {
-  currentAddress: null,
   savedAddresses: [],
   suspects: []
 };

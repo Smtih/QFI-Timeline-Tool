@@ -5,6 +5,7 @@ import { ExpandableList } from "components";
 
 function Suspects() {
   const [suspects] = useGlobal("suspects");
+  const [, setCurrentPosition] = useGlobal("currentPosition");
 
   return (
     <ExpandableList
@@ -12,7 +13,11 @@ function Suspects() {
       subHeader={<NoLocationsSubheader enabled={suspects.length === 0} />}
     >
       {suspects.map((suspect, i) => (
-        <ListItem key={i} button>
+        <ListItem
+          key={i}
+          button
+          onClick={() => setCurrentPosition(suspect.location)}
+        >
           <ListItemText primary={suspect.name} />
         </ListItem>
       ))}

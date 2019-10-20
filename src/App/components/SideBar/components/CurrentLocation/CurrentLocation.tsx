@@ -15,26 +15,26 @@ type Props = {
 
 function CurrentLocation({ ...rest }: Props) {
   const [savedAddresses, setSavedAddresses] = useGlobal("savedAddresses");
-  const [currentAddress] = useGlobal("currentAddress");
+  const [searchedAddress] = useGlobal("searchedAddress");
 
-  const saveCurrentAddress = useCallback(() => {
+  const saveSearchedAddress = useCallback(() => {
     const addresses = [...savedAddresses];
-    if (currentAddress) {
-      addresses.push(currentAddress);
+    if (searchedAddress) {
+      addresses.push(searchedAddress);
     }
     setSavedAddresses(addresses);
-  }, [savedAddresses, setSavedAddresses, currentAddress]);
+  }, [savedAddresses, setSavedAddresses, searchedAddress]);
 
   const existingLocation = useMemo(
     () =>
-      !!currentAddress &&
+      !!searchedAddress &&
       !!savedAddresses.find(
-        address => address.placeId === currentAddress.placeId
+        address => address.placeId === searchedAddress.placeId
       ),
-    [savedAddresses, currentAddress]
+    [savedAddresses, searchedAddress]
   );
 
-  if (!currentAddress) {
+  if (!searchedAddress) {
     return null;
   }
 
@@ -45,15 +45,15 @@ function CurrentLocation({ ...rest }: Props) {
           <Pin width={30} height={30} color="red" />
         </ListItemIcon>
         <ListItemText
-          primary={currentAddress.firstLine}
-          secondary={currentAddress.secondLine}
+          primary={searchedAddress.firstLine}
+          secondary={searchedAddress.secondLine}
         ></ListItemText>
       </ListItem>
       <ButtonContainer>
         <Button
           disabled={existingLocation}
           variant="outlined"
-          onClick={saveCurrentAddress}
+          onClick={saveSearchedAddress}
         >
           {existingLocation ? "Saved" : "Save Location"}
         </Button>
