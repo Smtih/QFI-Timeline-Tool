@@ -1,7 +1,7 @@
-import { Persist } from "./reactnPersist";
-import { getGlobal, setGlobal } from "reactn";
 import Tabletop from "tabletop";
+import { getGlobal, setGlobal } from "reactn";
 import { SuspectData } from "reactn/default";
+import { Persist } from "./reactnPersist";
 
 interface SheetData {
   name: string;
@@ -46,7 +46,8 @@ function toSuspectData({
 
 const defaultGlobal = {
   savedAddresses: [],
-  suspects: []
+  suspects: [],
+  currentDate: "2019-05-12T10:00:00.000Z"
 };
 
 const persist = new Persist(defaultGlobal, 12 * 60 * 60 * 1000);

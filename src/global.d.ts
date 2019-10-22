@@ -25,5 +25,6 @@ declare module "reactn/default" {
     searchedAddress?: AddressData;
     savedAddresses: AddressData[];
     suspects: SuspectData[];
+    currentDate: string;
   }
 }

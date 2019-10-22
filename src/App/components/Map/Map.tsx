@@ -1,6 +1,7 @@
 import React from "react";
-import { useGlobal } from "reactn";
+import moment from "moment";
 import styled from "styled-components";
+import { useGlobal } from "reactn";
 import { Map as GoogleMap, Circle, Marker } from "google-maps-react";
 
 interface Props {}
@@ -10,6 +11,10 @@ function Map({ ...rest }: Props) {
   const [searchedAddress] = useGlobal("searchedAddress");
   const [savedAddresses] = useGlobal("savedAddresses");
   const [suspects] = useGlobal("suspects");
+  const [currentDate] = useGlobal("currentDate");
+  const eligibleSuspects = suspects.filter(({ startTime, endTime }) =>
+    moment(currentDate).isBetween(startTime, endTime, undefined, "[)")
+  );
 
   return (
     <Container
@@ -31,7 +36,7 @@ function Map({ ...rest }: Props) {
             position={address.location}
           />
         ))}
-        {suspects.map((suspect, i) => (
+        {eligibleSuspects.map((suspect, i) => (
           <Circle key={i} center={suspect.location} radius={suspect.radius} />
         ))}
         {searchedAddress && (
