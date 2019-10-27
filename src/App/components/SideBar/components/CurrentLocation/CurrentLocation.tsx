@@ -1,6 +1,5 @@
 import React, { Fragment, useCallback, useMemo } from "react";
 import { useGlobal } from "reactn";
-import { Pin } from "svg";
 import {
   ListItem,
   ListItemIcon,
@@ -42,7 +41,10 @@ function CurrentLocation({ ...rest }: Props) {
     <Fragment>
       <ListItem component="div" {...rest}>
         <ListItemIcon>
-          <Pin width={30} height={30} color="red" />
+          <img
+            src={"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}
+            alt={"Pin Icon"}
+          />
         </ListItemIcon>
         <ListItemText
           primary={searchedAddress.firstLine}
