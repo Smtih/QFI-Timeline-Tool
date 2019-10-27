@@ -19,11 +19,10 @@ function CurrentLocation({ style }: Props) {
   const [, setCurrentPosition] = useGlobal("currentPosition");
 
   const saveSearchedAddress = useCallback(() => {
-    const addresses = [...savedAddresses];
     if (searchedAddress) {
-      addresses.push(searchedAddress);
+      const addresses = [...savedAddresses, searchedAddress];
+      setSavedAddresses(addresses);
     }
-    setSavedAddresses(addresses);
   }, [savedAddresses, setSavedAddresses, searchedAddress]);
 
   const existingLocation = useMemo(
@@ -58,7 +57,7 @@ function CurrentLocation({ style }: Props) {
         <Button
           disabled={existingLocation}
           variant="outlined"
-          onClick={saveSearchedAddress}
+          onClick={() => saveSearchedAddress()}
         >
           Save
         </Button>
