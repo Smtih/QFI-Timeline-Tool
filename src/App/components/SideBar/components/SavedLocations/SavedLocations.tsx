@@ -4,6 +4,7 @@ import { useGlobal } from "reactn";
 import {
   ListItem,
   ListItemText,
+  ListItemIcon,
   ListItemSecondaryAction,
   Typography,
   IconButton
@@ -35,6 +36,12 @@ function SavedLocations() {
           button
           onClick={() => setCurrentPosition(address.location)}
         >
+          <ListItemIcon>
+            <img
+              src={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
+              alt={"Pin Icon"}
+            />
+          </ListItemIcon>
           <ListItemText
             primary={address.firstLine}
             secondary={address.secondLine}

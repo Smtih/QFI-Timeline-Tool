@@ -1,7 +1,13 @@
 import React from "react";
 import moment from "moment";
+import Circle from "@material-ui/icons/LensTwoTone";
 import { useGlobal } from "reactn";
-import { ListItem, ListItemText, Typography } from "@material-ui/core";
+import {
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Typography
+} from "@material-ui/core";
 import { ExpandableList } from "components";
 
 function Suspects() {
@@ -22,6 +28,9 @@ function Suspects() {
           button
           onClick={() => setCurrentPosition(suspect.location)}
         >
+          <ListItemIcon>
+            <Circle fontSize={"large"} />
+          </ListItemIcon>
           <ListItemText primary={suspect.name} />
         </ListItem>
       ))}
