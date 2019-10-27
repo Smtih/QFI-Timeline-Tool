@@ -4,7 +4,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Button
+  Button,
+  ListItemSecondaryAction
 } from "@material-ui/core";
 import styled from "styled-components";
 
@@ -12,9 +13,10 @@ type Props = {
   style?: React.CSSProperties;
 };
 
-function CurrentLocation({ ...rest }: Props) {
+function CurrentLocation({ style }: Props) {
   const [savedAddresses, setSavedAddresses] = useGlobal("savedAddresses");
   const [searchedAddress] = useGlobal("searchedAddress");
+  const [, setCurrentPosition] = useGlobal("currentPosition");
 
   const saveSearchedAddress = useCallback(() => {
     const addresses = [...savedAddresses];
@@ -38,35 +40,31 @@ function CurrentLocation({ ...rest }: Props) {
   }
 
   return (
-    <Fragment>
-      <ListItem component="div" {...rest}>
-        <ListItemIcon>
-          <img
-            src={"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}
-            alt={"Pin Icon"}
-          />
-        </ListItemIcon>
-        <ListItemText
-          primary={searchedAddress.firstLine}
-          secondary={searchedAddress.secondLine}
-        ></ListItemText>
-      </ListItem>
-      <ButtonContainer>
+    <ListItem
+      button
+      onClick={() => setCurrentPosition(searchedAddress.location)}
+    >
+      <ListItemIcon>
+        <img
+          src={"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}
+          alt={"Pin Icon"}
+        />
+      </ListItemIcon>
+      <ListItemText
+        primary={searchedAddress.firstLine}
+        secondary={searchedAddress.secondLine}
+      ></ListItemText>
+      <ListItemSecondaryAction>
         <Button
           disabled={existingLocation}
           variant="outlined"
           onClick={saveSearchedAddress}
         >
-          {existingLocation ? "Saved" : "Save Location"}
+          Save
         </Button>
-      </ButtonContainer>
-    </Fragment>
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 }
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 export { CurrentLocation };
