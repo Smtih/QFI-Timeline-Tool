@@ -4,7 +4,7 @@ import { useGlobal } from "reactn";
 import {
   ListItem,
   ListItemText,
-  ListItemIcon,
+  ListItemSecondaryAction,
   Typography,
   IconButton
 } from "@material-ui/core";
@@ -39,11 +39,11 @@ function SavedLocations() {
             primary={address.firstLine}
             secondary={address.secondLine}
           />
-          <ListItemIcon>
+          <ListItemSecondaryAction>
             <IconButton onClick={() => deleteAddress(address)}>
               <CloseIcon />
             </IconButton>
-          </ListItemIcon>
+          </ListItemSecondaryAction>
         </ListItem>
       ))}
     </ExpandableList>
