@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useCallback } from "react";
+import CloseIcon from "@material-ui/icons/Close";
 import { useGlobal } from "reactn";
-import { ListItem, ListItemText, Typography } from "@material-ui/core";
+import {
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Typography,
+  IconButton
+} from "@material-ui/core";
 import { ExpandableList } from "components";
 
 function SavedLocations() {
   const [, setCurrentPosition] = useGlobal("currentPosition");
-  const [savedAddresses] = useGlobal("savedAddresses");
+  const [savedAddresses, setSavedAddresses] = useGlobal("savedAddresses");
+
+  const deleteAddress = useCallback(
+    ({ placeId: placeIdToRemove }) => {
+      const remaining = savedAddresses.filter(
+        ({ placeId }) => placeIdToRemove != placeId
+      );
+      setSavedAddresses(remaining);
+    },
+    [savedAddresses, setSavedAddresses]
+  );
 
   return (
     <ExpandableList
@@ -22,6 +39,11 @@ function SavedLocations() {
             primary={address.firstLine}
             secondary={address.secondLine}
           />
+          <ListItemIcon>
+            <IconButton onClick={() => deleteAddress(address)}>
+              <CloseIcon />
+            </IconButton>
+          </ListItemIcon>
         </ListItem>
       ))}
     </ExpandableList>
