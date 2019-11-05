@@ -31,6 +31,7 @@ function Map({ ...rest }: Props) {
       >
         {savedAddresses.map(({ firstLine, location }, i) => (
           <Marker
+            key={i}
             title={firstLine}
             icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
             position={location}
@@ -57,8 +58,8 @@ function Map({ ...rest }: Props) {
   );
 }
 
-const defaultCenter = { lat: -37.774376, lng: 144.947494 };
-const defaultZoom = 15;
+const defaultCenter = { lat: -37.714145, lng: 145.065955 };
+const defaultZoom = 13;
 
 const Container = styled.div`
   display: flex;
