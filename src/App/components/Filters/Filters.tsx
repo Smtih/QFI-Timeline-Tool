@@ -22,7 +22,7 @@ function Filters({ ...rest }) {
           onChange={(event, value) =>
             setCurrentDate(moment.unix(value as number).toISOString())
           }
-          step={3600}
+          step={1800}
           min={startDate}
           max={endDate}
         />

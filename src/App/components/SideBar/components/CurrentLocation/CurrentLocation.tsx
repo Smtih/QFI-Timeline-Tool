@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useGlobal } from "reactn";
 import {
   ListItem,
@@ -7,7 +7,6 @@ import {
   Button,
   ListItemSecondaryAction
 } from "@material-ui/core";
-import styled from "styled-components";
 
 type Props = {
   style?: React.CSSProperties;

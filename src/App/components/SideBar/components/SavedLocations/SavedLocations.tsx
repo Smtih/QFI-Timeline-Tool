@@ -18,7 +18,7 @@ function SavedLocations() {
   const deleteAddress = useCallback(
     ({ placeId: placeIdToRemove }) => {
       const remaining = savedAddresses.filter(
-        ({ placeId }) => placeIdToRemove != placeId
+        ({ placeId }) => placeIdToRemove !== placeId
       );
       setSavedAddresses(remaining);
     },
