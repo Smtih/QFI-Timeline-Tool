@@ -29,7 +29,7 @@ function Suspects() {
           onClick={() => setCurrentPosition(suspect.location)}
         >
           <ListItemIcon>
-            <Circle fontSize={"large"} />
+            <Circle style={{ color: suspect.color }} fontSize={"large"} />
           </ListItemIcon>
           <ListItemText primary={suspect.name} />
         </ListItem>

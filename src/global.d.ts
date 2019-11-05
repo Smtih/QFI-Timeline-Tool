@@ -14,6 +14,7 @@ declare module "reactn/default" {
 
   export interface SuspectData extends Mappable {
     name: string;
+    color: string;
     radius: number;
     startTime: string;
     endTime: string;

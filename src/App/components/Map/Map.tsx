@@ -29,15 +29,21 @@ function Map({ ...rest }: Props) {
         center={currentPosition}
         onDragend={() => setCurrentPosition(undefined)}
       >
-        {savedAddresses.map((address, i) => (
+        {savedAddresses.map(({ firstLine, location }, i) => (
           <Marker
-            title={address.firstLine}
+            title={firstLine}
             icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
-            position={address.location}
+            position={location}
           />
         ))}
-        {eligibleSuspects.map((suspect, i) => (
-          <Circle key={i} center={suspect.location} radius={suspect.radius} />
+        {eligibleSuspects.map(({ location, radius, color }, i) => (
+          <Circle
+            key={i}
+            center={location}
+            radius={radius}
+            fillColor={color}
+            strokeColor={color}
+          />
         ))}
         {searchedAddress && (
           <Marker

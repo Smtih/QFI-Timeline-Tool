@@ -5,6 +5,7 @@ import { Persist } from "./reactnPersist";
 
 interface SheetData {
   name: string;
+  color: string;
   address: string;
   lat: number;
   lng: number;
@@ -29,6 +30,7 @@ Tabletop.init({
 
 function toSuspectData({
   name,
+  color,
   radius,
   startTime,
   endTime,
@@ -37,6 +39,7 @@ function toSuspectData({
 }: SheetData): SuspectData {
   return {
     name,
+    color,
     radius,
     startTime,
     endTime,
