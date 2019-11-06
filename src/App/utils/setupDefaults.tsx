@@ -3,7 +3,7 @@ import { getGlobal, setGlobal } from "reactn";
 import { SuspectData } from "reactn/default";
 import { Persist } from "./reactnPersist";
 
-interface SheetData {
+interface SuspectSheetData {
   name: string;
   color: string;
   address: string;
@@ -14,19 +14,19 @@ interface SheetData {
   radius: number;
 }
 
-Tabletop.init({
-  key: "1qcsUcO02_Ppf965XmiuCYnZZik6pLiV3wO3fBvRwaQs",
-  simpleSheet: true,
-  parseNumbers: true
-})
-  .then(data => data.map(toSuspectData))
-  .then((suspects: SheetData[]) => {
-    const global = getGlobal();
-    setGlobal({
-      ...global,
-      suspects
-    });
+async function setTabletopData() {
+  const sheets = await Tabletop.init({
+    key: "1qcsUcO02_Ppf965XmiuCYnZZik6pLiV3wO3fBvRwaQs",
+    parseNumbers: true
   });
+  const suspectData: SuspectSheetData[] = sheets["Encoded V1"].elements;
+  const suspects = suspectData.map(toSuspectData);
+  const global = getGlobal();
+  setGlobal({
+    ...global,
+    suspects
+  });
+}
 
 function toSuspectData({
   name,
@@ -36,7 +36,7 @@ function toSuspectData({
   endTime,
   lat,
   lng
-}: SheetData): SuspectData {
+}: SuspectSheetData): SuspectData {
   return {
     name,
     color,
@@ -55,5 +55,7 @@ const defaultGlobal = {
 
 const persist = new Persist(defaultGlobal, 12 * 60 * 60 * 1000);
 persist.initialise();
+
+setTabletopData();
 
 export { persist };

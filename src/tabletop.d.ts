@@ -8,5 +8,9 @@ declare module "tabletop" {
     parseNumbers?: boolean;
   }
 
-  export function init(options: Options): Promise<any>;
+  interface Sheet {
+    elements: any[];
+  }
+
+  export function init(options: Options): Promise<{ [key: string]: Sheet }>;
 }
