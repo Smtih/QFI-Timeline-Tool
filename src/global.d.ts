@@ -7,7 +7,6 @@ declare module "reactn/default" {
 
   export interface AddressData extends Mappable {
     placeId: string;
-    full: string;
     firstLine: string;
     secondLine: string;
   }

@@ -38,7 +38,6 @@ function PlacesSearch({ ...rest }: Props) {
         .then(location => {
           setSearchedAddress({
             placeId: suggestion.placeId,
-            full: suggestion.description,
             firstLine: suggestion.formattedSuggestion.mainText,
             secondLine: suggestion.formattedSuggestion.secondaryText,
             location
