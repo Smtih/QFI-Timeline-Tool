@@ -1,17 +1,25 @@
 import Tabletop from "tabletop";
 import { getGlobal, setGlobal } from "reactn";
-import { SuspectData } from "reactn/default";
 import { Persist } from "./reactnPersist";
 
-interface SuspectSheetData {
+interface LocationData {
+  lat: number;
+  lng: number;
+}
+
+interface SuspectSheetData extends LocationData {
   name: string;
   color: string;
   address: string;
-  lat: number;
-  lng: number;
   startTime: string;
   endTime: string;
   radius: number;
+}
+
+interface AddressSheetData extends LocationData {
+  placeId: string;
+  firstLine: string;
+  secondLine: string;
 }
 
 async function setTabletopData() {
@@ -19,30 +27,23 @@ async function setTabletopData() {
     key: "1qcsUcO02_Ppf965XmiuCYnZZik6pLiV3wO3fBvRwaQs",
     parseNumbers: true
   });
-  const suspectData: SuspectSheetData[] = sheets["Encoded V1"].elements;
-  const suspects = suspectData.map(toSuspectData);
+  const suspectData: SuspectSheetData[] = sheets["Suspects"].elements;
+  const suspects = suspectData.map(toMappable);
+
+  const addressData: AddressSheetData[] = sheets["Locations"].elements;
+  const savedAddresses = addressData.map(toMappable);
+
   const global = getGlobal();
   setGlobal({
     ...global,
-    suspects
+    suspects,
+    savedAddresses
   });
 }
 
-function toSuspectData({
-  name,
-  color,
-  radius,
-  startTime,
-  endTime,
-  lat,
-  lng
-}: SuspectSheetData): SuspectData {
+function toMappable({ lat, lng, ...rest }: LocationData) {
   return {
-    name,
-    color,
-    radius,
-    startTime,
-    endTime,
+    ...rest,
     location: { lat, lng }
   };
 }
