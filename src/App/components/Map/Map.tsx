@@ -12,8 +12,10 @@ function Map({ ...rest }: Props) {
   const [savedAddresses] = useGlobal("savedAddresses");
   const [suspects] = useGlobal("suspects");
   const [currentDate] = useGlobal("currentDate");
-  const eligibleSuspects = suspects.filter(({ startTime, endTime }) =>
-    moment(currentDate).isBetween(startTime, endTime, undefined, "[)")
+  const eligibleSuspects = suspects.filter(
+    ({ startTime, endTime, visible }) =>
+      visible &&
+      moment(currentDate).isBetween(startTime, endTime, undefined, "[)")
   );
 
   return (

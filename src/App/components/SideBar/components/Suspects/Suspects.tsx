@@ -1,21 +1,36 @@
-import React from "react";
+import React, { useCallback } from "react";
 import moment from "moment";
 import Circle from "@material-ui/icons/LensTwoTone";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import { useGlobal } from "reactn";
 import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  Typography
+  Typography,
+  ListItemSecondaryAction,
+  IconButton
 } from "@material-ui/core";
 import { ExpandableList } from "components";
+import { SuspectData } from "reactn/default";
 
 function Suspects() {
-  const [suspects] = useGlobal("suspects");
+  const [suspects, setSuspects] = useGlobal("suspects");
   const [currentDate] = useGlobal("currentDate");
   const [, setCurrentPosition] = useGlobal("currentPosition");
   const eligibleSuspects = suspects.filter(({ startTime, endTime }) =>
     moment(currentDate).isBetween(startTime, endTime, undefined, "[)")
+  );
+  const toggleVisibility = useCallback(
+    (suspect: SuspectData) => {
+      const newSuspects = [...suspects];
+      const newSuspect = { ...suspect, visible: !suspect.visible };
+      const i = suspects.indexOf(suspect);
+      newSuspects[i] = newSuspect;
+      setSuspects(newSuspects);
+    },
+    [suspects, setSuspects]
   );
   return (
     <ExpandableList
@@ -32,6 +47,11 @@ function Suspects() {
             <Circle style={{ color: suspect.color }} fontSize={"large"} />
           </ListItemIcon>
           <ListItemText primary={suspect.name} />
+          <ListItemSecondaryAction>
+            <IconButton onClick={() => toggleVisibility(suspect)}>
+              {suspect.visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
       ))}
     </ExpandableList>

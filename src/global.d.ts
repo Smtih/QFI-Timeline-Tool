@@ -17,6 +17,7 @@ declare module "reactn/default" {
     radius: number;
     startTime: string;
     endTime: string;
+    visible: boolean;
   }
 
   export interface Reducers {}

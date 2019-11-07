@@ -30,7 +30,9 @@ async function setTabletopData(global: State) {
       parseNumbers: true
     });
     const suspectData: SuspectSheetData[] = sheets["Suspects"].elements;
-    const suspects = suspectData.map(toMappable);
+    const suspects = suspectData
+      .map(suspect => ({ ...suspect, visible: true }))
+      .map(toMappable);
 
     const addressData: AddressSheetData[] = sheets["Locations"].elements;
     const savedAddresses = addressData.map(toMappable);
