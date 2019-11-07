@@ -12,10 +12,11 @@ class Persist {
     this.invalidateMs = invalidateMs;
   }
 
-  initialise(): void {
+  initialise(onComplete: (global: State) => void): void {
     const global = this.getGlobal();
     addCallback(global => this.storeGlobal(global));
     setGlobal(global);
+    onComplete(global);
   }
 
   storeGlobal(global: State): void {
