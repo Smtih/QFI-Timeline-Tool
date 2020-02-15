@@ -22,7 +22,7 @@
     "stylis": "^3.5.4",
     "tabletop": "^1.6.2",
     "typescript": "3.7.2",
-    "yarn": "^1.19.1"
+    "yarn": "^1.22.0"
   },
   "scripts": {
     "start": "react-scripts start",
