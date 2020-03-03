@@ -91,7 +91,6 @@ const defaultComponents = {
   IndicatorSeparator: () => null
 };
 
-const google = (window as any).google;
 const searchOptions = {
   location: new google.maps.LatLng(-37, 144),
   radius: 5000,
