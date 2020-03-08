@@ -7,24 +7,27 @@ import { Typography } from "@material-ui/core";
 
 function Filters({ ...rest }) {
   const [currentDate, setCurrentDate] = useGlobal("currentDate");
-  const unixDate = moment(currentDate).unix();
+  const [startDate] = useGlobal("startDate");
+  const [endDate] = useGlobal("endDate");
+  const [interval] = useGlobal("intervalMinutes");
+
   return (
     <Container {...rest}>
       <Row>
-        <Typography>{formatDate(unixDate)}</Typography>
+        <Typography>{formatDate(currentDate)}</Typography>
       </Row>
       <Row>
         <Typography style={{ paddingRight: 16, textAlign: "right" }}>
           {formatDate(startDate)}
         </Typography>
         <Slider
-          value={unixDate}
+          value={moment(currentDate).unix()}
           onChange={(event, value) =>
             setCurrentDate(moment.unix(value as number).toISOString())
           }
-          step={1800}
-          min={startDate}
-          max={endDate}
+          step={interval * 60}
+          min={moment(startDate).unix()}
+          max={moment(endDate).unix()}
         />
         <Typography style={{ paddingLeft: 16, textAlign: "left" }}>
           {formatDate(endDate)}
@@ -34,12 +37,9 @@ function Filters({ ...rest }) {
   );
 }
 
-function formatDate(date: number): string {
-  return moment.unix(date).format("DD/MM/YYYY hh:mm a");
+function formatDate(date: string): string {
+  return moment(date).format("DD/MM/YYYY hh:mm a");
 }
-
-const startDate = moment("2019-05-12T06:00:00.000+10").unix();
-const endDate = moment("2019-05-14T22:00:00.000+10").unix();
 
 const Container = styled.div`
   display: flex;

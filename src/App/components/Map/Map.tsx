@@ -12,6 +12,9 @@ function Map({ ...rest }: Props) {
   const [savedAddresses] = useGlobal("savedAddresses");
   const [suspects] = useGlobal("suspects");
   const [currentDate] = useGlobal("currentDate");
+  const [defaultZoom] = useGlobal("defaultZoom");
+  const [defaultCenter] = useGlobal("defaultCenter");
+
   const eligibleSuspects = suspects.filter(
     ({ startTime, endTime, visible }) =>
       visible &&
@@ -59,9 +62,6 @@ function Map({ ...rest }: Props) {
     </Container>
   );
 }
-
-const defaultCenter = { lat: -37.714145, lng: 145.065955 };
-const defaultZoom = 13;
 
 const Container = styled.div`
   display: flex;

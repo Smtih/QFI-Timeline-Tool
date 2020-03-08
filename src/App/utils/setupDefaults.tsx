@@ -2,6 +2,7 @@ import Tabletop from "tabletop";
 import { setGlobal } from "reactn";
 import { Persist } from "./reactnPersist";
 import { State } from "reactn/default";
+import { getQueryData } from "./getQueryData";
 
 interface LocationData {
   lat: number;
@@ -23,10 +24,25 @@ interface AddressSheetData extends LocationData {
   secondLine: string;
 }
 
-async function setTabletopData(global: State) {
-  if (global === defaultGlobal) {
+interface SettingSheetData {
+  defaultDate: string;
+  defaultLat: string;
+  defaultLng: string;
+  startDate: string;
+  endDate: string;
+  intervalMinutes: number;
+  defaultZoomLevel: number;
+}
+
+const { key, timeout } = getQueryData();
+
+async function setTabletopData(global: State): Promise<void> {
+  if (global.key == null) {
+    if (!key) {
+      throw new Error("No Sheet Key In Url");
+    }
     const sheets = await Tabletop.init({
-      key: "1qcsUcO02_Ppf965XmiuCYnZZik6pLiV3wO3fBvRwaQs",
+      key,
       parseNumbers: true
     });
     const suspectData: SuspectSheetData[] = sheets["Suspects"].elements;
@@ -37,10 +53,27 @@ async function setTabletopData(global: State) {
     const addressData: AddressSheetData[] = sheets["Locations"].elements;
     const savedAddresses = addressData.map(toMappable);
 
-    setGlobal({
+    const {
+      defaultDate,
+      defaultLat,
+      defaultLng,
+      defaultZoomLevel,
+      startDate,
+      endDate,
+      intervalMinutes
+    }: SettingSheetData = sheets["Settings"].elements[0];
+
+    await setGlobal({
       ...global,
+      key,
       suspects,
-      savedAddresses
+      savedAddresses,
+      currentDate: defaultDate,
+      defaultCenter: { lat: defaultLat, lng: defaultLng },
+      defaultZoom: defaultZoomLevel,
+      startDate,
+      endDate,
+      intervalMinutes
     });
   }
 }
@@ -55,10 +88,19 @@ function toMappable({ lat, lng, ...rest }: LocationData) {
 const defaultGlobal = {
   savedAddresses: [],
   suspects: [],
-  currentDate: "2019-05-12T10:00:00.000+10"
+  currentDate: "2019-05-12T10:00:00.000+10",
+  defaultCenter: { lat: -37.714145, lng: 145.065955 },
+  defaultZoom: 14,
+  intervalMinutes: 30,
+  startDate: "2019-05-12T06:00:00.000+10",
+  endDate: "2019-05-14T22:00:00.000+10"
 };
 
-const persist = new Persist(defaultGlobal, 12 * 60 * 60 * 1000);
-persist.initialise(setTabletopData);
+const persist = new Persist(defaultGlobal, timeout);
+persist.initialise(global => {
+  setTabletopData(global).then(() => {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  });
+});
 
 export { persist };

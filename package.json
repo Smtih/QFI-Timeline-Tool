@@ -10,6 +10,7 @@
     "google-maps-react": "fullstackreact/google-maps-react#a5039e08fffdfe915edbec98b3b33c3974e9eccc",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
+    "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-is": "^16.13.0",
