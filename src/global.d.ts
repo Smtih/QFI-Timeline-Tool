@@ -24,7 +24,7 @@ declare module "reactn/default" {
   export interface State {
     currentPosition?: google.maps.LatLngLiteral;
     searchedAddress?: AddressData;
-    key: string;
+    key?: string;
     savedAddresses: AddressData[];
     suspects: SuspectData[];
     currentDate: string;
