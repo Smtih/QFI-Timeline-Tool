@@ -1,7 +1,7 @@
 import Tabletop from "tabletop";
 import { setGlobal } from "reactn";
 import { Persist } from "./reactnPersist";
-import { State } from "reactn/default";
+import { State, SuspectData } from "reactn/default";
 import { getQueryData } from "./getQueryData";
 
 interface LocationData {
@@ -37,18 +37,13 @@ interface SettingSheetData {
 const { key, timeout } = getQueryData();
 
 async function setTabletopData(global: State): Promise<void> {
-  if (global.key == null) {
-    if (!key) {
-      throw new Error("No Sheet Key In Url");
-    }
+  if (global.key == null && key) {
     const sheets = await Tabletop.init({
       key,
       parseNumbers: true
     });
     const suspectData: SuspectSheetData[] = sheets["Suspects"].elements;
-    const suspects = suspectData
-      .map(suspect => ({ ...suspect, visible: true }))
-      .map(toMappable);
+    const suspects = suspectData.map(parseSuspect);
 
     const addressData: AddressSheetData[] = sheets["Locations"].elements;
     const savedAddresses = addressData.map(toMappable);
@@ -76,6 +71,32 @@ async function setTabletopData(global: State): Promise<void> {
       intervalMinutes
     });
   }
+}
+
+function parseSuspect({ lat, lng, ...rest }: SuspectSheetData): SuspectData {
+  return {
+    ...rest,
+    location: randomLocation({ lat, lng }, rest.radius),
+    visible: true
+  };
+}
+
+function randomLocation({ lat, lng }: LocationData, radius: number) {
+  // Convert radius from meters to degrees
+  const radiusInDegrees = radius / 111000;
+
+  const w = radiusInDegrees * Math.sqrt(Math.random());
+  const t = 2 * Math.PI * Math.random();
+  const x = w * Math.cos(t);
+  const y = w * Math.sin(t);
+
+  // Adjust the x-coordinate for the shrinking of the east-west distances
+  const new_x = x / Math.cos((lat * Math.PI) / 180);
+
+  const foundLongitude = new_x + lng;
+  const foundLatitude = y + lat;
+
+  return { lat: foundLatitude, lng: foundLongitude };
 }
 
 function toMappable({ lat, lng, ...rest }: LocationData) {
