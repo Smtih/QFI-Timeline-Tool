@@ -5,20 +5,23 @@ import { setGlobal, addCallback } from "reactn";
 const KEY_BASE = "QFI_TIMELINE_TOOL";
 
 class Persist {
-  globalStorageKey = `${KEY_BASE}_GLOBAL`;
-  timeoutStorageKey = `${KEY_BASE}_TIMEOUT`;
-  initialGlobal: State;
-  timeoutMs: number;
+  private globalStorageKey = `${KEY_BASE}_GLOBAL`;
+  private timeoutStorageKey = `${KEY_BASE}_TIMEOUT`;
+  private timeoutMs: number;
 
-  constructor(initialGlobal: State, timeoutMs?: number) {
-    this.initialGlobal = initialGlobal;
+  constructor(private initialGlobal: State, timeoutMs?: number) {
     if (timeoutMs != null) {
       localStorage.setItem(this.timeoutStorageKey, String(timeoutMs));
       this.timeoutMs = timeoutMs;
     } else {
-      this.timeoutMs = Number(
-        localStorage.getItem(this.timeoutStorageKey) || 12 * 60 * 60 * 1000
-      );
+      const storedTimeout = localStorage.getItem(this.timeoutStorageKey);
+
+      if (storedTimeout == null) {
+        this.timeoutMs = 12 * 60 * 60 * 1000;
+        localStorage.setItem(this.timeoutStorageKey, String(this.timeoutMs));
+      } else {
+        this.timeoutMs = Number(storedTimeout);
+      }
     }
   }
 
