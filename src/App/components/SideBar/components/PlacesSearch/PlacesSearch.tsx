@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { useGlobal } from "reactn";
 import { ListItem } from "@material-ui/core";
-import styled from "styled-components";
 import PlacesAutocomplete, {
   geocodeByPlaceId,
   getLatLng
 } from "react-places-autocomplete";
-import Select from "react-select";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 type Props = {
   style?: React.CSSProperties;
@@ -15,23 +15,25 @@ type Props = {
 function PlacesSearch({ ...rest }: Props) {
   const [searchString, setSearchString] = useState("");
   const [, setSearchedAddress] = useGlobal("searchedAddress");
-  const [, setCurrentPosition] = useGlobal("currentPosition");
+  const [currentPosition, setCurrentPosition] = useGlobal("currentPosition");
+  const [defaultCenter] = useGlobal("defaultCenter");
 
   const handleChange = useCallback(
     (searchString: string) => {
-      if (searchString) {
+      if (typeof searchString === "string") {
         setSearchString(searchString);
+      } else {
+        setSearchString("");
       }
     },
     [setSearchString]
   );
 
   const handleSelect = useCallback(
-    value => {
-      if (!value) {
+    (event, suggestion) => {
+      if (!suggestion) {
         return;
       }
-      const suggestion = value.value;
       handleChange(suggestion.description);
       geocodeByPlaceId(suggestion.placeId)
         .then(results => getLatLng(results[0]))
@@ -57,28 +59,34 @@ function PlacesSearch({ ...rest }: Props) {
         debounce={500}
         value={searchString}
         onChange={handleChange}
-        searchOptions={searchOptions}
+        searchOptions={{
+          location: new google.maps.LatLng(currentPosition || defaultCenter),
+          ...searchOptions
+        }}
       >
         {({ getInputProps, suggestions }) => {
-          const { onChange } = getInputProps();
-
-          const options = suggestions.map(suggestion => ({
-            value: suggestion,
-            label: suggestion.description
-          }));
+          const { onChange, value } = getInputProps();
 
           return (
-            <SelectContainer>
-              <Select
-                menuIsOpen={options.length > 0}
-                filterOption={() => true}
-                onInputChange={value => onChange({ target: { value } })}
-                components={defaultComponents}
-                placeholder={"Search"}
-                options={options}
-                onChange={handleSelect}
-              />
-            </SelectContainer>
+            <Autocomplete
+              style={{ display: "flex", flex: 1 }}
+              options={[...suggestions]}
+              getOptionLabel={suggestion => suggestion.description}
+              onInputChange={onChange}
+              onChange={handleSelect}
+              inputValue={value}
+              disableOpenOnFocus
+              freeSolo
+              selectOnFocus
+              renderInput={params => (
+                <TextField
+                  fullWidth
+                  label={"Places Search"}
+                  variant={"outlined"}
+                  {...params}
+                />
+              )}
+            />
           );
         }}
       </PlacesAutocomplete>
@@ -86,21 +94,11 @@ function PlacesSearch({ ...rest }: Props) {
   );
 }
 
-const defaultComponents = {
-  DropdownIndicator: () => null,
-  IndicatorSeparator: () => null
-};
-
 const searchOptions = {
-  location: new google.maps.LatLng(-37, 144),
   radius: 5000,
   componentRestrictions: {
     country: "AU"
   }
 };
-
-const SelectContainer = styled.div`
-  width: 100%;
-`;
 
 export { PlacesSearch };
