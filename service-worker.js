@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/QFI-Timeline-Tool/precache-manifest.a2b63811a91b6af728013c4288a63d0d.js"
+  "/QFI-Timeline-Tool/precache-manifest.8af588341080004cd8b67788ad931cbd.js"
 );
 
 self.addEventListener('message', (event) => {
