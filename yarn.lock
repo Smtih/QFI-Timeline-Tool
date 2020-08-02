@@ -5028,9 +5028,9 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-google-maps-react@fullstackreact/google-maps-react#a5039e08fffdfe915edbec98b3b33c3974e9eccc:
-  version "2.0.3"
-  resolved "https://codeload.github.com/fullstackreact/google-maps-react/tar.gz/a5039e08fffdfe915edbec98b3b33c3974e9eccc"
+google-maps-react@smtih/google-maps-react:
+  version "2.0.6"
+  resolved "https://codeload.github.com/smtih/google-maps-react/tar.gz/c3483b1603e94de602ee7cd961a70ed4bc8cb059"
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2:
   version "4.2.3"
