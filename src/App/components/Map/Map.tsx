@@ -8,6 +8,7 @@ import {
   Marker,
   InfoWindow
 } from "google-maps-react";
+import { formatDate } from "../Filters";
 
 interface Props {}
 
@@ -65,7 +66,9 @@ function Map({ ...rest }: Props) {
                 setInfo({
                   location,
                   firstLine: name,
-                  secondLine: `${startTime} - ${endTime}`
+                  secondLine: `${formatDate(startTime)} - ${formatDate(
+                    endTime
+                  )}`
                 });
               }}
               key={i}

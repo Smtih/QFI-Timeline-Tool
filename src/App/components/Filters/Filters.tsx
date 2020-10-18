@@ -37,7 +37,7 @@ function Filters({ ...rest }) {
   );
 }
 
-function formatDate(date: string): string {
+export function formatDate(date: string): string {
   return moment(date).format("DD/MM/YYYY hh:mm a");
 }
 
