@@ -75,15 +75,14 @@ function PlacesSearch({ ...rest }: Props) {
               onInputChange={onChange}
               onChange={handleSelect}
               inputValue={value}
-              disableOpenOnFocus
               freeSolo
               selectOnFocus
               renderInput={params => (
                 <TextField
+                  {...params}
                   fullWidth
                   label={"Places Search"}
                   variant={"outlined"}
-                  {...params}
                 />
               )}
             />
