@@ -1,4 +1,4 @@
-import Tabletop from "tabletop";
+import * as Papa from "papaparse";
 import { setGlobal } from "reactn";
 import { Persist } from "./reactnPersist";
 import { State, SuspectData } from "reactn/default";
@@ -38,14 +38,19 @@ const { key, timeout } = getQueryData();
 
 async function setTabletopData(global: State): Promise<void> {
   if (global.key == null && key) {
-    const sheets = await Tabletop.init({
-      key,
-      parseNumbers: true
-    });
-    const suspectData: SuspectSheetData[] = sheets["Suspects"].elements;
+    console.log(key);
+    const configs: Array<{ sheet: string; url: string }> = await loadRemoteData(
+      `https://docs.google.com/spreadsheets/d/e/${key}/pub?output=csv`
+    );
+    console.log(configs);
+    const suspectData: SuspectSheetData[] = await loadRemoteData(
+      configs.find(({ sheet }) => sheet === "Suspects")?.url!
+    );
     const suspects = suspectData.map(parseSuspect);
 
-    const addressData: AddressSheetData[] = sheets["Locations"].elements;
+    const addressData: AddressSheetData[] = await loadRemoteData(
+      configs.find(({ sheet }) => sheet === "Locations")?.url!
+    );
     const savedAddresses = addressData.map(toMappable);
 
     const {
@@ -56,7 +61,9 @@ async function setTabletopData(global: State): Promise<void> {
       startDate,
       endDate,
       intervalMinutes
-    }: SettingSheetData = sheets["Settings"].elements[0];
+    }: SettingSheetData = await loadRemoteData(
+      configs.find(({ sheet }) => sheet === "Settings")?.url!
+    ).then(([data]) => data);
 
     await setGlobal({
       ...global,
@@ -71,6 +78,22 @@ async function setTabletopData(global: State): Promise<void> {
       intervalMinutes
     });
   }
+}
+
+async function loadRemoteData(url: string): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      complete: result => {
+        return resolve(result.data);
+      },
+      error: error => {
+        reject(error);
+      }
+    });
+  });
 }
 
 function parseSuspect({ lat, lng, ...rest }: SuspectSheetData): SuspectData {
