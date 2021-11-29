@@ -32,27 +32,14 @@ interface SettingSheetData {
   endDate: string;
   intervalMinutes: number;
   defaultZoomLevel: number;
+  suspectsUrl: string;
+  locationsUrl: string;
 }
 
 const { key, timeout } = getQueryData();
 
-async function setTabletopData(global: State): Promise<void> {
+async function setRemoteData(global: State): Promise<void> {
   if (global.key == null && key) {
-    console.log(key);
-    const configs: Array<{ sheet: string; url: string }> = await loadRemoteData(
-      `https://docs.google.com/spreadsheets/d/e/${key}/pub?output=csv`
-    );
-    console.log(configs);
-    const suspectData: SuspectSheetData[] = await loadRemoteData(
-      configs.find(({ sheet }) => sheet === "Suspects")?.url!
-    );
-    const suspects = suspectData.map(parseSuspect);
-
-    const addressData: AddressSheetData[] = await loadRemoteData(
-      configs.find(({ sheet }) => sheet === "Locations")?.url!
-    );
-    const savedAddresses = addressData.map(toMappable);
-
     const {
       defaultDate,
       defaultLat,
@@ -60,10 +47,21 @@ async function setTabletopData(global: State): Promise<void> {
       defaultZoomLevel,
       startDate,
       endDate,
-      intervalMinutes
+      intervalMinutes,
+      suspectsUrl,
+      locationsUrl
     }: SettingSheetData = await loadRemoteData(
-      configs.find(({ sheet }) => sheet === "Settings")?.url!
+      `https://docs.google.com/spreadsheets/d/e/${key}/pub?output=csv`
     ).then(([data]) => data);
+
+    const [suspects, savedAddresses] = await Promise.all([
+      loadRemoteData(suspectsUrl).then(suspectData =>
+        suspectData.map(parseSuspect)
+      ),
+      loadRemoteData(locationsUrl).then(addressData =>
+        addressData.map(toMappable)
+      )
+    ]);
 
     await setGlobal({
       ...global,
@@ -142,7 +140,7 @@ const defaultGlobal = {
 
 const persist = new Persist(defaultGlobal, timeout);
 persist.initialise(global => {
-  setTabletopData(global).then(() => {
+  setRemoteData(global).then(() => {
     window.history.replaceState({}, document.title, window.location.pathname);
   });
 });
